@@ -1,72 +1,96 @@
+// TODO: add jsdoc
+
 /*
-  Напишите функцию, которая принимает 1 аргумент и возварщает его тип
+  Should accept one argument and return its type
 */
 function getDataType(variable) {
-
+  return typeof variable;
 }
 
 /*
-  Напишите функцию, которая принимает 1 аргумент и возвращает:
-  'primitive' если тип данных относится к примивным
-  'primitive-special' если тип данных специальный
-  'object' - если простой обьект
-  'object-array' - если массив
-  'object-function' - если функция
+  Should return:
+  'primitive' if argument is a primitive datatype
+  'primitive-special' if it is special primitive (null)
+  'object' - for simple objects
+  'object-array' - for arrays
+  'object-function' - for functions
 */
 function getDataTypePseudoName(variable) {
+  const variableType = typeof variable;
+  const primitiveTypes = ['number', 'string', 'boolean', 'symbol', 'undefined'];
 
+  // let's break all the rules and create hydra with multiple returns
+
+  if (primitiveTypes.includes(variableType)) return 'primitive';
+
+  if (variable === null) return 'primitive-special';
+
+  if (Array.isArray(variable)) return 'object-array';
+
+  if (typeof variable === 'function') return 'object-function';
+
+  // ok, return just typeof result
+  return typeof variable;
 }
 
-
 /*
-  Напишите функцию, которая принимает 2 аргумента,
-  и возврвщает 1 если их значения и их типы равны,
-  0 если равны только значения
-  и -1 в другом случае
+  Should return:
+  1 if arguments types and values are equal
+  0 if only arguments' values are equal
+  -1 otherwise
 */
 function compareByType(a, b) {
+  if (typeof a === typeof b) return 1;
 
+  /* eslint-disable eqeqeq */
+  if (a == b) return 0;
+
+  return -1;
 }
 
 // Numbers
 
+// helper function to check if argument is numeric type
+function isNumeric(value) {
+  return !Number.isNaN(Number.parseFloat(value)) && Number.isFinite(value);
+}
+
 /*
-  Напишите функцию, которая принимает 1 аргумент,
-  и в случае если аргумент имеет числовой тип увеличивает его на 1
-  и возврвщвет результат,
-  в любом другом случае возврвщвет -1
+  Should return argument's value increased by 1 if it is number
+  otherwise return -1
 */
 function increase(value) {
-
+  return isNumeric(value) ? value + 1 : -1;
 }
 
 /*
-  Напишите функцию, которая принимает 1 аргумент(число),
-  и в случае если аргумент не Infinity или NaN возвращает строку 'safe' иначе 'danger'
+  Accepts 1 arguments (number)
+  returns 'safe' if argument is not a NaN or Infinity
+  otherwise returns 'danger'
 */
 function testForSafeNumber(value) {
-
+  return isNumeric(value) ? 'safe' : 'danger';
 }
-
-
 
 // Strings
 
 /*
-  Напишите функцию, которая принимает 1 аргумент (строку),
-  и возвращает массив из елементов строки разделенных по пробелу ' '
+  Should accept 1 string argument
+  Returns array of words in string
 */
 function stringToArray(str) {
-
+  return str.split(' ');
 }
 
-
 /*
-  Напишите функцию, которая принимает 1 аргумент (строку),
-  и возвращает часть этой строки до первой запятой
+  Shold accept 1 string argument
+  Returns part of string before comma
 */
 function getStringPart(str) {
+  let commaPos = str.indexOf(',');
+  commaPos = commaPos === -1 ? undefined : commaPos;
 
+  return str.slice(0, commaPos);
 }
 
 /*
@@ -75,7 +99,10 @@ function getStringPart(str) {
   false в противоположном случае
 */
 function isSingleSymbolMatch(str, symbol) {
+  const indexOfSymbol = str.indexOf(symbol);
+  const isUnique = indexOfSymbol === str.lastIndexOf(symbol);
 
+  return isUnique ? indexOfSymbol : false;
 }
 
 /*
@@ -84,35 +111,33 @@ function isSingleSymbolMatch(str, symbol) {
   и возвращает строку ввиде элементов массива c разделителями если разделитель задан
   или строку разделенную "-" если не задан
 */
-function join(array, separator) {
-
+function join(array, separator = '-') {
+  return array.join(separator === '' ? '-' : separator);
 }
-
 
 /*
   Напишите функцию, которая принимает 2 массива,
   и возвращает один состоящий из элементов перового и второго (последовательно сначала первый потом второй)
 */
 function glue(arrA, arrB) {
-
+  // return [...arrA, ...arrB];
+  return arrA.concat(arrB);
 }
-
 
 /*
   Напишите функцию, которая принимает 1 массив,
   и возвращает другой массив отсортированный от большего к меньшему
 */
 function order(arr) {
-
+  return arr.sort((a, b) => a < b);
 }
-
 
 /*
   Напишите функцию, которая принимает 1 массив,
   и возвращает другой без чисел которые меньше 0
 */
 function removeNegative(arr) {
-
+  return arr.filter(item => item >= 0);
 }
 
 /*
@@ -122,7 +147,15 @@ function removeNegative(arr) {
   [1,2,3], [1, 3] => [2]
 */
 function without(arrA, arrB) {
+  const result = [];
 
+  arrA.forEach(aElement => {
+    if (arrB.indexOf(aElement) === -1) {
+      result.push(aElement);
+    }
+  });
+
+  return result;
 }
 
 /*
@@ -176,5 +209,5 @@ export default {
   without,
   calcExpression,
   calcComparison,
-  evalKey
+  evalKey,
 };

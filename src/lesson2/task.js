@@ -21,8 +21,8 @@ export function sumAll(...args) {
 export function pow(x, n) {
   let res = 1;
 
-  // yes, let's use i += 1 like fucking idiots, instead of ++i, just to avoid eslint warnings
-  for (let i = 0; i < n; i += 1) {
+  /* eslint-disable no-plusplus */
+  for (let i = 0; i < n; ++i) {
     res *= x;
   }
 

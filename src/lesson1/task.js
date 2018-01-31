@@ -188,8 +188,8 @@ function without(arrA, arrB) {
   return result;
 }
 
-// helper functions for calcExpression
-function readNumber(str, start = 0) {
+// helper functions for calcExpression and calcComparison
+function readNumber(str) {
   // let result = '';
   // let end = start;
   //
@@ -203,7 +203,7 @@ function readNumber(str, start = 0) {
   return parseFloat(str);
 }
 
-function calculate(operator, operand1, operand2) {
+function calculateOperation(operator, operand1, operand2) {
   let result;
 
   switch (operator) {
@@ -242,78 +242,42 @@ function calculate(operator, operand1, operand2) {
 }
 
 function parseOperator(expression, supportedOperators) {
-  let operator = expression.slice(0,2);
+  let operator = expression.slice(0, 2);
   if (supportedOperators.indexOf(operator) === -1) {
-    operator = expression[0];
+    [operator] = expression;
     if (supportedOperators.indexOf(operator) === -1) {
       console.warn(`Unsupported operator: ${operator}`);
-      return;
+      return '';
     }
   }
 
   return operator;
 }
 
-function __calc(expression, supportedOperators, errorArgHandler) {
-  expression = expression.trim();
+function calculate(expression, supportedOperators, errorArgHandler) {
+  const trimmedExpression = expression.trim();
 
-  const firstOperand = readNumber(expression);
-  if ( Number.isNaN(firstOperand) ) return errorArgHandler(firstOperand);
+  const firstOperand = readNumber(trimmedExpression);
+  if (Number.isNaN(firstOperand)) return errorArgHandler(firstOperand);
 
-  const remainingExpression = expression.split(firstOperand).pop().trim();
+  const remainingExpression = trimmedExpression.split(firstOperand).pop().trim();
 
   const operator = parseOperator(remainingExpression, supportedOperators);
 
   const secondOperand = readNumber(remainingExpression.slice(operator.length));
-  if ( Number.isNaN(secondOperand) ) return errorArgHandler(secondOperand);
+  if (Number.isNaN(secondOperand)) return errorArgHandler(secondOperand);
 
-  return calculate(operator, firstOperand, secondOperand);
+  return calculateOperation(operator, firstOperand, secondOperand);
 }
 
-function calcComparison(expression) {
-  return __calc(expression, ['>', '<', '=', '>=', '<='], () => {
-    throw new Error(`Invalid argument`);
-  })
-  // expression = expression.trim();
-  //
-  // const supportedOperators = ['>', '<', '=', '>=', '<='];
-  //
-  // const firstOperand = readNumber(expression);
-  // if ( Number.isNaN(firstOperand) ) {
-  //   throw new Error('Invalid first operand');
-  // }
-  //
-  // const remainingExpression = expression.split(firstOperand).pop().trim();
-  //
-  // const operator = parseOperator(remainingExpression, supportedOperators);
-  //
-  // const secondOperand = readNumber(remainingExpression.slice(operator.length));
-  // if ( Number.isNaN(secondOperand) ) {
-  //   throw new Error('Invalid second operand');
-  // }
-  //
-  // return calculate(operator, firstOperand, secondOperand);
-}
+/*
+  Calculates basic mathematical expression
 
+  @param {string} expression - string with 2 operands and operator: +, -, /, *.
+  @return {number} - expression result or NaN
+*/
 function calcExpression(expression) {
-  return __calc(expression, ['+', '-', '*', '/'], () => {return NaN});
-  // expression = expression.trim();
-  //
-  // const supportedOperators = ['+', '-', '*', '/'];
-  //
-  // const firstOperand = readNumber(expression);
-  // if ( Number.isNaN(firstOperand) ) {
-  //   console.log('Invalid first operand');
-  //   return NaN;
-  // }
-  //
-  // const remainingExpression = expression.split(firstOperand).pop().trim();
-  //
-  // const operator = parseOperator(remainingExpression, supportedOperators);
-  //
-  // const secondOperand = readNumber(remainingExpression.slice(1));
-  //
-  // return calculate(operator, firstOperand, secondOperand);
+  return calculate(expression, ['+', '-', '*', '/'], () => NaN);
 }
 
 /*
@@ -322,6 +286,21 @@ function calcExpression(expression) {
   @param {Object} obj - object to evaluate property for
   @param {string} expression - property path with dots
   @return {any} - property value or throw exception
+*/
+function calcComparison(expression) {
+  return calculate(expression, ['>', '<', '=', '>=', '<='], () => {
+    throw new Error('Invalid argument');
+  });
+}
+
+/*
+  Returns object's property value by its path, e.g.:
+  { a: { x: 2 }, b: 5 }, '.a.x' => 2
+  { a: 1, b: 2 }, '.c' => exception
+
+  @param {obj} - object to eval property for
+  @param {string} - property path
+  @return {any} - value of the property
 */
 
 // let's have more fun (and problems) and use recursion

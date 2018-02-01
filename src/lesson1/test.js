@@ -41,7 +41,7 @@ describe('Basic JavaScript', () => {
       expect(getDataTypePseudoName(null)).toEqual('primitive-special');
 
       expect(getDataTypePseudoName([1, 2, 4])).toEqual('object-array');
-      expect(getDataTypePseudoName(function() {})).toEqual('object-function');
+      expect(getDataTypePseudoName(() => {})).toEqual('object-function');
 
       expect(getDataTypePseudoName({})).toEqual('object');
       expect(getDataTypePseudoName(Math)).toEqual('object');
@@ -78,7 +78,7 @@ describe('Basic JavaScript', () => {
 
       expect(testForSafeNumber(25)).toEqual('safe');
       expect(testForSafeNumber('safe')).toEqual('danger');
-      expect(testForSafeNumber({'i am': 'save'})).toEqual('danger');
+      expect(testForSafeNumber({ 'i am': 'save' })).toEqual('danger');
       expect(testForSafeNumber(NaN)).toEqual('danger');
       expect(testForSafeNumber(Infinity)).toEqual('danger');
     });
@@ -87,8 +87,8 @@ describe('Basic JavaScript', () => {
   describe('Strings', () => {
     it('should be possible to create array from string', () => {
 
-      expect(stringToArray('this is JavaScript')).toEqual(['this','is','JavaScript']);
-      expect(stringToArray('this is JavaScript ')).toEqual(['this','is','JavaScript']);
+      expect(stringToArray('this is JavaScript')).toEqual(['this', 'is', 'JavaScript']);
+      expect(stringToArray('this is JavaScript ')).toEqual(['this', 'is', 'JavaScript']);
     });
 
     it('should be possible to fetch part of the string', () => {
@@ -115,14 +115,16 @@ describe('Basic JavaScript', () => {
   describe('Arrays', () => {
     it('should be possible to stringify arrays with separators', () => {
 
-      expect(join(['o', 'o', 'p'],'+')).toEqual('o+o+p');
+      expect(join(['o', 'o', 'p'], '+')).toEqual('o+o+p');
+
+      /* eslint-disable no-sparse-arrays */
       expect(join([1, , 3], '=')).toEqual('1==3');
       expect(join([1, 2, 3], '')).toEqual('1-2-3');
     });
 
     it('should be possible to make 1 array from two', () => {
 
-      expect(glue(['o', 'o', 'p'], ['is', 'good'])).toEqual(['o','o','p','is','good']);
+      expect(glue(['o', 'o', 'p'], ['is', 'good'])).toEqual(['o', 'o', 'p', 'is', 'good']);
       expect(glue([1, , 3], [5, 7])).toEqual([1, , 3, 5, 7]);
       expect(glue([1, 2, 3], [])).toEqual([1, 2, 3]);
     });
@@ -130,15 +132,15 @@ describe('Basic JavaScript', () => {
 
     it('should be possible to sort array', () => {
 
-      let arr1 = ['d', 'a', 't', 'm'];
+      const arr1 = ['d', 'a', 't', 'm'];
       expect(order(arr1)).toEqual(['t', 'm', 'd', 'a']);
       expect(arr1).toEqual(['d', 'a', 't', 'm']);
 
-      let arr2 = [1, 2, 3];
+      const arr2 = [1, 2, 3];
       expect(order(arr2)).toEqual([3, 2, 1]);
       expect(arr2).toEqual([1, 2, 3]);
 
-      let arr3 = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+      const arr3 = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
       expect(order(arr3)).toEqual(arr3);
       expect(arr3).toEqual([10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
     });

@@ -3,15 +3,17 @@
   Function should return a number - amount of optional parameters that were passed into function.
   Hint: you are allowed to modify both function definition and function body.
 */
-export function countOptional() {
-
+export function countOptional(first, seconds, ...rest) {
+  return rest.length;
 }
 
 /*
   Write your implementation of native Function.prototype.bind method
 */
-export function bindContext(fn, context) {
-
+export function bindContext(fn, context, ...args) {
+  return function (...moreArgs) {
+    return fn.apply(context, [...args, ...moreArgs]);
+  };
 }
 
 

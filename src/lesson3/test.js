@@ -41,7 +41,7 @@ describe('Functions and FP lesson', () => {
     });
   });
 
-  xdescribe('addLogCapability', () => {
+  describe('addLogCapability', () => {
     it('should make object implement loggable interface', () => {
 
       const o = {
@@ -65,7 +65,7 @@ describe('Functions and FP lesson', () => {
     });
   });
 
-  xdescribe('logger', () => {
+  describe('logger', () => {
     it('should create custom logger functions', () => {
 
       const myLogger = logger('Lesson 3');
@@ -74,7 +74,7 @@ describe('Functions and FP lesson', () => {
     });
   });
 
-  xdescribe('compose', () => {
+  describe('compose', () => {
     it('should compose function from left to right', () => {
 
       function sayTitle(name) {
@@ -88,9 +88,24 @@ describe('Functions and FP lesson', () => {
 
       expect(sayHi('Anderson')).toEqual('Hello Mr Anderson');
     });
+
+    xit('should compose functions', () => {
+
+      function multiply5(x) {
+        return 5 * x;
+      }
+
+      function add10(x) {
+        return 10 + x;
+      }
+
+      const add10AndMuldtiply5 = compose(multiply5, add10);
+
+      expect(add10AndMuldtiply5(4)).toBe(30);
+    });
   });
 
-  xdescribe('partial', () => {
+  describe('partial', () => {
     it('should create partial application', () => {
 
       function concat(str1, str2, str3) {

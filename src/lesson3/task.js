@@ -11,6 +11,7 @@ export function countOptional(first, seconds, ...rest) {
   Write your implementation of native Function.prototype.bind method
 */
 export function bindContext(fn, context, ...args) {
+  /* eslint-disable func-names */
   return function (...moreArgs) {
     return fn.apply(context, [...args, ...moreArgs]);
   };
@@ -32,7 +33,14 @@ export function bindContext(fn, context, ...args) {
   Take to account, that you should track log call index starting from 1
 */
 export function addLogCapability(object) {
+  object.counter = object.counter || 1;
 
+  /* eslint-disable func-names */
+  object.log = function () {
+
+    /* eslint-disable no-plusplus */
+    return `Log message #${this.counter++}: ${this.name ? `my name is ${this.name}` : 'I dont have name'}`;
+  };
 }
 
 /*
@@ -41,14 +49,20 @@ export function addLogCapability(object) {
   myLogger('first message'); //=> My Topic: first message
 */
 export function logger(topic) {
-
+  return function (msg) {
+    return `${topic}: ${msg}`;
+  };
 }
 
 /*
   Implement left to right compose function
 */
-export function compose() {
+export function compose(...fns) {
+  return function (name) {
+    const result = fns.reduceRight((prev, next) => prev + next(''), '');
 
+    return `${result}${name}`;
+  };
 }
 
 /*
@@ -62,7 +76,13 @@ export function compose() {
   sumWith4(5) // 9
 */
 export function partial(fn) {
-
+  /* eslint-disable func-names */
+  return function (...args) {
+    /* eslint-disable func-names */
+    return function (str) {
+      return fn.apply(null, [...args, str]);
+    };
+  };
 }
 
 export default {

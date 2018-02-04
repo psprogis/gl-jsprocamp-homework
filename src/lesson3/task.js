@@ -10,10 +10,10 @@ export function countOptional(first, seconds, ...rest) {
 /*
   Write your implementation of native Function.prototype.bind method
 */
-export function bindContext(fn, context, ...args) {
+export function bindContext(fn, context, ...boundArgs) {
   /* eslint-disable func-names */
   return function (...moreArgs) {
-    return fn.apply(context, [...args, ...moreArgs]);
+    return fn.apply(context, [...boundArgs, ...moreArgs]);
   };
 }
 
@@ -33,6 +33,7 @@ export function bindContext(fn, context, ...args) {
   Take to account, that you should track log call index starting from 1
 */
 export function addLogCapability(object) {
+  // TODO: use (Weak)Map (object => counter) and make counter private
   object.counter = object.counter || 1;
 
   /* eslint-disable func-names */
@@ -57,11 +58,10 @@ export function logger(topic) {
 /*
   Implement left to right compose function
 */
-export function compose(...fns) {
-  return function (name) {
-    const result = fns.reduceRight((prev, next) => prev + next(''), '');
-
-    return `${result}${name}`;
+function compose(...fns) {
+  /* eslint-disable func-names */
+  return function (initialArg) {
+    return fns.reduce((value, func) => func(value), initialArg);
   };
 }
 
@@ -75,12 +75,12 @@ export function compose(...fns) {
   const sumWith4 = partialSum(4);
   sumWith4(5) // 9
 */
-export function partial(fn) {
+function partial(fn) {
   /* eslint-disable func-names */
-  return function (...args) {
+  return function (...argsBound) {
     /* eslint-disable func-names */
-    return function (str) {
-      return fn.apply(null, [...args, str]);
+    return function (...args) {
+      return fn.call(this, ...argsBound, ...args);
     };
   };
 }

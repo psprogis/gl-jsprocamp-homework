@@ -28,5 +28,5 @@ export function createMap(arr) {
 
 export default {
   createSet,
-  createMap
+  createMap,
 };

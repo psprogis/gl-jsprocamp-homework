@@ -89,7 +89,7 @@ describe('Functions and FP lesson', () => {
       expect(sayHi('Anderson')).toEqual('Hello Mr Anderson');
     });
 
-    xit('should compose functions', () => {
+    it('should compose mathematical functions ', () => {
 
       function multiply5(x) {
         return 5 * x;

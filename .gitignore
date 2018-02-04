@@ -3,6 +3,5 @@ node_modules/
 dist/
 coverage/
 tests/
-__tests*
 .idea
 /tmp.js

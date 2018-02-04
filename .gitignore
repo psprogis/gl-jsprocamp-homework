@@ -5,3 +5,4 @@ coverage/
 tests/
 .idea
 /tmp.js
+__tests*

@@ -33,15 +33,14 @@ export function bindContext(fn, context, ...boundArgs) {
   Take to account, that you should track log call index starting from 1
 */
 export function addLogCapability(object) {
-  // TODO: use (Weak)Map (object => counter) and make counter private
-  object.counter = object.counter || 1;
+  (function () {
+    let counter = 1;
 
-  /* eslint-disable func-names */
-  object.log = function () {
-
-    /* eslint-disable no-plusplus */
-    return `Log message #${this.counter++}: ${this.name ? `my name is ${this.name}` : 'I dont have name'}`;
-  };
+    object.log = function log() {
+      /* eslint-disable no-plusplus */
+      return `Log message #${counter++}: ${this.name ? `my name is ${this.name}` : 'I dont have name'}`;
+    };
+  }());
 }
 
 /*

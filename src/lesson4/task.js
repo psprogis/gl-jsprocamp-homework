@@ -1,3 +1,5 @@
+import MySet from './MySet';
+
 /*
   Write a function that creates custom set object. Function
   accepts single optional parameter (array) do define initial
@@ -9,7 +11,7 @@
   mySet = createSet(['a', 'b', 'c'])
 */
 export function createSet(arr) {
-
+  return new MySet(arr);
 }
 
 /*

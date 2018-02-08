@@ -1,4 +1,5 @@
 import MySet from './MySet';
+import MyMap from './MyMap';
 
 /*
   Write a function that creates custom set object. Function
@@ -16,7 +17,7 @@ export function createSet(arr) {
 
 /*
   Write a function that creates custom map object. Function
-  accepts single optional parameter (array) do define initial
+  accepts single optional parameter (array) to define initial
   map content.
   Map should have set(), get(), has(), delete(), forEach(), clear()
   methods and size property. Should not use es6 objects Map, WeakMap,
@@ -25,7 +26,7 @@ export function createSet(arr) {
   myMap = createMap([['a', 1], ['b', 2], ['c', 3]])
 */
 export function createMap(arr) {
-
+  return new MyMap(arr);
 }
 
 export default {

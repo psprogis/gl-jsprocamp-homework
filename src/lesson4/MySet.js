@@ -1,3 +1,4 @@
+// TODO: use Object.is for NaN handling
 
 export default function MySet(arr = []) {
 
@@ -72,7 +73,7 @@ MySet.prototype.findIndex = function findIndex(value) {
 };
 
 MySet.prototype.filterUnique = function findUnique(arr) {
-  // return arr.filter(item, idx) => arr.indexOf(item) === idx;
+  // return arr.filter((item, idx) => arr.indexOf(item) === idx);
   const result = [];
 
   // use for of to support any iterable

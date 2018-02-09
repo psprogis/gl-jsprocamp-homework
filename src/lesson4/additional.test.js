@@ -27,6 +27,7 @@ describe('Set additional tests', () => {
     mySet.clear();
 
     expect(mySet.size).toBe(0);
+    expect(mySet.has(1)).toBe(false);
   });
 
   it('should support deletion of NaN values', () => {
@@ -44,11 +45,17 @@ describe('Set additional tests', () => {
 
     expect(mySet.size).toBe(3);
   });
+
+  it('should return false if delete non-existent value', () => {
+    const mySet = createSet().add(10).add(20);
+
+    expect(mySet.delete(100)).toBe(false);
+  });
 });
 
 describe('Map additional tests', () => {
 
-  it('should use NaN as key', () => {
+  it('should use NaN as key in constructor', () => {
     const myMap = createMap([[NaN, 10]]);
 
     expect(myMap.size).toBe(1);
@@ -100,6 +107,32 @@ describe('Map additional tests', () => {
     expect(myMap.get(1)).toBe(5);
     expect(myMap.get(NaN)).toBe(9);
     expect(myMap.get(obj)).toBe(2);
+  });
+
+  it('should check if it has some key', () => {
+    const myMap = createMap([['a', 1], ['b', 2], ['c', 3]]);
+
+    expect(myMap.has('b')).toBe(true);
+    expect(myMap.has('d')).toBe(false);
+  });
+
+  it('should delete 1 element', () => {
+    const myMap = createMap([['a', 1], ['b', 2], ['c', 3]]);
+
+    expect(myMap.delete('b')).toBe(true);
+    expect(myMap.size).toBe(2);
+
+    expect(myMap.delete('d')).toBe(false);
+    expect(myMap.size).toBe(2);
+  });
+
+  it('should clear all elements', () => {
+    const myMap = createMap([['a', 1]]);
+    myMap.set('b', 2).set('c', 3);
+
+    myMap.clear();
+    expect(myMap.size).toBe(0);
+    expect(myMap.get('a')).toBeUndefined();
   });
 
 });

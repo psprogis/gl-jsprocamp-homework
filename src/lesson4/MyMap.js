@@ -1,18 +1,27 @@
+import MySet from './MySet';
 
 export default function MyMap(arr = []) {
 
-  // TODO: use define property
-  this.myKeys = [];
-  this.myValues = [];
-
-  this.init(arr);
-
-  Object.defineProperty(this, 'size', {
-    get: () => this.myKeys.length,
+  // make some special "private" properties not enumerable
+  Object.defineProperties(this, {
+    myKeys: {
+      value: [],
+      enumerable: false,
+    },
+    myValues: {
+      value: [],
+      enumerable: false,
+    },
+    size: {
+      get: () => this.myKeys.length,
+      enumerable: true,
+    },
   });
+
+  this.myInit(arr);
 }
 
-MyMap.prototype.init = function init(arr) {
+MyMap.prototype.myInit = function init(arr) {
   arr.forEach(([key, value]) => {
     this.set(key, value);
   });
@@ -20,7 +29,7 @@ MyMap.prototype.init = function init(arr) {
 
 MyMap.prototype.set = function set(key, value) {
 
-  const keyIdx = this.findIndex(key);
+  const keyIdx = this.myFindIndex(key);
 
   // this is new key
   if (keyIdx === -1) {
@@ -36,7 +45,7 @@ MyMap.prototype.set = function set(key, value) {
 };
 
 MyMap.prototype.get = function get(key) {
-  const keyIdx = this.findIndex(key);
+  const keyIdx = this.myFindIndex(key);
 
   return keyIdx !== -1 ? this.myValues[keyIdx] : undefined;
 };
@@ -51,9 +60,9 @@ MyMap.prototype.has = function has(key) {
 };
 
 MyMap.prototype.delete = function del(key) {
-  const keyIdx = this.myKeys.indexOf(key);
+  const keyIdx = this.myFindIndex(key);
 
-  if (!keyIdx) return false;
+  if (keyIdx === -1) return false;
 
   this.myKeys.splice(keyIdx, 1);
   this.myValues.splice(keyIdx, 1);
@@ -62,15 +71,19 @@ MyMap.prototype.delete = function del(key) {
 };
 
 MyMap.prototype.forEach = function forEach(callback) {
+
   /* eslint-disable no-plusplus */
   for (let i = 0; i < this.myKeys.length; ++i) {
     callback.call(null, this.myValues[i], this.myKeys[i], this);
   }
 };
 
-MyMap.prototype.findIndex = function findIndex(key) {
+MyMap.prototype.myFindIndex = function myFindIndex(key) {
+
+  // use Object.is instead ?
   if (!Number.isNaN(key)) return this.myKeys.indexOf(key);
 
+  // use normal for-loop since we need index of key
   /* eslint-disable no-plusplus */
   for (let i = 0; i < this.myKeys.length; ++i) {
     if (Number.isNaN(this.myKeys[i])) return i;
@@ -78,3 +91,15 @@ MyMap.prototype.findIndex = function findIndex(key) {
 
   return -1;
 };
+
+MySet.prototype[Symbol.toPrimitive] = function toPrimitive() {
+  return '[object MyMap]';
+};
+
+// keys
+
+// values
+
+// entries
+
+// for of support

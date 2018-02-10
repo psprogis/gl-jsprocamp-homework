@@ -71,7 +71,7 @@ function isNumeric(value) {
   @return {number} -  argument's value increased by 1 if it is number, otherwise -1
 */
 function increase(value) {
-  return isNumeric(value) ? value + 1 : -1;
+  return (isNumeric(value) || (value === Infinity)) ? value + 1 : -1;
 }
 
 /*
@@ -156,7 +156,20 @@ function glue(arrA, arrB) {
   @return {Array} - sorted array
 */
 function order(arr) {
-  return Array.from(arr).sort((a, b) => a < b);
+
+  let compareFunction = null;
+
+  if (arr[0].charCodeAt && arr[0].length === 1) {
+
+    // compare strings
+    compareFunction = (a, b) => a < b;
+  } else {
+
+    // compare numbers
+    compareFunction = (a, b) => b - a;
+  }
+
+  return Array.from(arr).sort(compareFunction);
 }
 
 /*
@@ -310,7 +323,7 @@ function evalKey(obj, expression) {
   if (secondDot === -1) {
     if (expression[0] !== '.') throw new Error('Invalid property name, should start with "."');
 
-    const propName = expression.replace('.', '');
+    const propName = expression.replace('.', '').trim();
     const propValue = obj[propName];
 
     if (propValue === undefined) {
@@ -320,7 +333,7 @@ function evalKey(obj, expression) {
     return propValue;
   }
 
-  const propName = expression.slice(1, secondDot);
+  const propName = expression.slice(1, secondDot).trim();
   const remainingExpression = expression.slice(secondDot);
 
   return evalKey(obj[propName], remainingExpression);

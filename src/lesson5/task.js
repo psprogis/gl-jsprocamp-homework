@@ -1,26 +1,7 @@
 
-// helper. May be useful when need to select random monster, if you need it
-function getRandomInt(min, max) {
-  /* eslint-disable no-param-reassign */
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  /* eslint-disable no-mixed-operators */
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-const Game = function () {
-
-};
-
-const Hero = function (name, charClass) {
-
-};
-
-
-const Monster = function (charClass) {
-
-};
+import Hero from './Hero';
+import Monster from './Monster';
+import Game from './Game';
 
 /* Game Population mechanism should go below */
 

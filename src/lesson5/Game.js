@@ -3,10 +3,12 @@ import Hero from './Hero';
 import Monster from './Monster';
 
 const statuses = {
-  idle      : "Idle",
-  progress  : "In progress",
-  finished  : "Finished"
+  IDLE      : "Idle",
+  PROGRESS  : "In progress",
+  FINISHED  : "Finished"
 };
+
+const MAX_MONSTERS = 2;
 
 // Should have properties
 // status - String, representing current game status
@@ -21,13 +23,10 @@ const statuses = {
 
 
 export default function Game () {
-  this.status = statuses.idle;
+  this.status = statuses.IDLE;
   this.hero = undefined;  // FIXME: try to avoid using undefined
   this.monsters = [];
 }
-
-// maxMonsters = 2
-
 
 // Change game status from "Idle" to "In progress", should be possible only if hero and monsters are defined
 // returns: "Your journey has started, fight monsters" - if ok
@@ -37,7 +36,7 @@ Game.prototype.beginJourney = function() {
     throw new Error('Cannot start journey, populate the world with hero and monsters first');
   }
 
-  this.status = statuses.progress;
+  this.status = statuses.PROGRESS;
 
   return 'Your journey has started, fight monsters';
 };
@@ -48,6 +47,18 @@ Game.prototype.beginJourney = function() {
 //        "The Game is finished. Hero is dead :(" - if hero is dead
 //        "Don`t stop. Some monsters are still alive. Kill`em all" - if its not time yet
 Game.prototype.finishJourney = function() {
+  const isHeroDead = this.hero.life === 0;
+  const areMonstersDead = this.monsters.every(monster => monster.life === 0);
+
+  // vital units are still alive
+  if (!isHeroDead && !areMonstersDead) {
+    return 'Don`t stop. Some monsters are still alive. Kill`em all';
+  }
+
+  this.status = statuses.FINISHED;
+
+  if (isHeroDead) return 'The Game is finished. Hero is dead :(';
+  if (areMonstersDead) return 'The Game is finished. Monsters are dead. Congratulations';
 
 };
 
@@ -78,21 +89,20 @@ Game.prototype.addHero = function(hero) {
 Game.prototype.addMonster = function(monster) {
   if (!(monster instanceof Monster)) throw new Error('Only monster Instances can become monsters');
 
-  if (this.monsters.length === 2) throw new Error('Only 2 monsters can exist');
+  if (this.monsters.length === MAX_MONSTERS) throw new Error('Only 2 monsters can exist');
 
   this.monsters.push(monster);
 
   return `Monster Created, ${monster.getCharClass()} appeared in the world`;
 };
 
-
 // Initiate a battle between hero and monster, one after another, they should attack each other, starting from hero,
 // and until someone life is not 0
 // returns string 'Hero win' or 'Monster win', depending on who has life points left
 Game.prototype.fight = function () {
-  if (this.status !== statuses.progress) throw new Error('Begin your journey to start fighting monsters');
+  if (this.status !== statuses.PROGRESS) throw new Error('Begin your journey to start fighting monsters');
 
-  const monster = this.monsters[0];
+  const monster = this.monsters.filter(monster => monster.life !== 0)[0];
   const hero = this.hero;
 
   while (true) {

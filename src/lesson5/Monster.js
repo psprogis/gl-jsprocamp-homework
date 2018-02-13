@@ -2,8 +2,8 @@
 // instance of Monster should have
 
 // .charClass // sting
-//   .life	// number
-//   .damage	// number
+//   .life // number
+//   .damage // number
 //   .getName() // function returning "I am MONSTER_CHARACTER_CLASS I don`t have name"
 //   .getCharClass() // function returning character class
 //
@@ -13,10 +13,10 @@
 //   //         "Monster attacked, " + GENERAL_ATTACK_MESSAGE
 //   .attack(target) //
 
-import {uppercaseFirstLetter} from './helpers';
+import { uppercaseFirstLetter } from './helpers';
 import Hero from './Hero';
 
-export default function Monster (charClass) {
+export default function Monster(charClass) {
 
   const supportedClasses = ['Zombie', 'Skeleton', 'Holem'];
   if (supportedClasses.indexOf(uppercaseFirstLetter(charClass)) === -1) {
@@ -42,14 +42,17 @@ export default function Monster (charClass) {
       this.life = 15;
       this.damage = 6;
       break;
+
+    default:
+      throw new Error('how did you get here?');
   }
 }
 
-Monster.prototype.getCharClass = function() {
+Monster.prototype.getCharClass = function getCharClass() {
   return this.charClass;
 };
 
-Monster.prototype.getName = function() {
+Monster.prototype.getName = function getName() {
   return `I am ${this.charClass} I don\`t have name`;
 };
 
@@ -61,7 +64,7 @@ Monster.prototype.getName = function() {
 //         "done AMOUNT_OF_DAMAGE damage to CHARACTER_CLASS";
 // .attack(target)
 
-Monster.prototype.attack = function(enemy) {
+Monster.prototype.attack = function attack(enemy) {
   if (!(enemy instanceof Hero)) {
     return 'I will attack only Hero';
   }

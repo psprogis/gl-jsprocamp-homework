@@ -1,5 +1,5 @@
 import Hero from './Hero';
-import AttackUnit from "./AttackUnit";
+import AttackUnit from './AttackUnit';
 
 const monsterClasses = {
   zombie: {
@@ -23,11 +23,7 @@ function Monster(charClass) {
   const classDescription = monsterClasses[charClass];
   if (classDescription === undefined) throw new Error('Incorrect character class provided');
 
-  AttackUnit.call(this, charClass);
-
-  this.charClass = classDescription.charClass;
-  this.life = classDescription.life;
-  this.damage = classDescription.damage;
+  AttackUnit.call(this, charClass, classDescription.life, classDescription.damage);
 }
 
 Monster.prototype = Object.create(AttackUnit.prototype);
@@ -35,18 +31,15 @@ Monster.prototype.constructor = Monster;
 
 // @override
 Monster.prototype.getName = function getName() {
-  return `I am ${this.charClass} I don\`t have name`;
+  return `I am ${this.getCharClass()} I don\`t have name`;
 };
 
 Monster.prototype.attack = function attack(enemy) {
-  if (!(enemy instanceof Hero)) {
-    return 'I will attack only Hero';
-  }
+  if (!(enemy instanceof Hero)) return 'I will attack only Hero';
 
   const attackMsg = AttackUnit.prototype.attack.call(this, enemy);
 
   return `Monster attacked, ${attackMsg}`;
-
 };
 
 export default Monster;

@@ -23,14 +23,12 @@ function Hero(name, charClass) {
   const classDescription = heroClasses[charClass];
   if (classDescription === undefined) throw new Error('Incorrect character class provided');
 
-  AttackUnit.call(this, charClass);
+  AttackUnit.call(this, charClass, classDescription.life, classDescription.damage);
 
   this.name = name;
-  this.charClass = classDescription.charClass;
-  this.life = classDescription.life;
-  this.damage = classDescription.damage;
 }
 
+// inherit from AttackUnit
 Hero.prototype = Object.create(AttackUnit.prototype);
 Hero.prototype.constructor = Hero;
 
@@ -40,9 +38,7 @@ Hero.prototype.getName = function getName() {
 };
 
 Hero.prototype.attack = function attack(enemy) {
-  if (!(enemy instanceof Monster)) {
-    return 'I will attack only monsters';
-  }
+  if (!(enemy instanceof Monster)) return 'I will attack only monsters';
 
   const attackMsg = AttackUnit.prototype.attack.call(this, enemy);
 

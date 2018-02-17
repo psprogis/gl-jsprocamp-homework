@@ -1,4 +1,3 @@
-
 import Hero from './Hero';
 import Monster from './Monster';
 
@@ -10,18 +9,9 @@ const statuses = {
 
 const MAX_MONSTERS = 2;
 
-// Should have properties
-// status - String, representing current game status
-// hero - Object, representing hero
-// monsters - Array of Objects, representing monsters, max = maxMonsters
-
-// Should have methods
-// beginJourney - Change game status to "In Progress".
-//     It should be impossible to begin journey if game misses heroe and 2 monsters
-// addHero - To add hero to game
-// addMoster - To add monster to the game
-
-
+// status {string} - representing current game status
+// hero {Object} - representing hero
+// monsters {Objects[]} - representing monsters, max = maxMonsters
 export default function Game() {
   this.status = statuses.IDLE;
   this.hero = undefined; // FIXME: try to avoid using undefined
@@ -52,7 +42,6 @@ Game.prototype.finishJourney = function finishJourney() {
   const isHeroDead = this.hero.life === 0;
   const areMonstersDead = this.monsters.every(monster => monster.life === 0);
 
-  // vital units are still alive
   if (!isHeroDead && !areMonstersDead) {
     return 'Don`t stop. Some monsters are still alive. Kill`em all';
   }
@@ -79,7 +68,7 @@ Game.prototype.addHero = function addHero(hero) {
 
   this.hero = hero;
 
-  return `Hero created, welcome ${this.name}`;
+  return `Hero created, welcome ${hero.getName()}`;
 };
 
 // adds monster to game.monsters array
@@ -106,9 +95,11 @@ Game.prototype.addMonster = function addMonster(monster) {
 Game.prototype.fight = function fight() {
   if (this.status !== statuses.PROGRESS) throw new Error('Begin your journey to start fighting monsters');
 
+  // get first alive monster
   const monster = this.monsters.filter(monster => monster.life !== 0)[0];
   const { hero } = this;
 
+  /* eslint-disable no-constant-condition */
   while (true) {
 
     if (hero.life) {
